@@ -171,7 +171,6 @@ const track = (() => {
 
   /* ── Closing panel: opens once in view, then the headline rises word by word ── */
   const closer = document.querySelector('[data-closer]');
-  const closerBtn = closer.querySelector('.closer__btn');
 
   function splitWords() {
     const title = closer.querySelector('[data-words]');
@@ -180,8 +179,6 @@ const track = (() => {
     title.innerHTML = text.split(/\s+/)
       .map((w, n) => `<span class="cw" aria-hidden="true" style="--i:${n}">${w}</span>`)
       .join(' ');
-    const count = title.querySelectorAll('.cw').length;
-    closerBtn.style.setProperty('--btn-delay', `${0.7 + count * 0.07}s`);
   }
 
   const closerIO = new IntersectionObserver((entries) => {
@@ -255,29 +252,26 @@ const track = (() => {
     stageIO.observe(stage);
   }
 
-  /* ── Mobile CTA dock ── */
+  /* ── Mobile CTA dock: hidden wherever a section already shows its own button ── */
   const dock = document.querySelector('[data-dock]');
   const dockLink = dock.querySelector('a');
-  const hero = document.querySelector('.hero');
-  const finalCta = document.querySelector('#audit');
-  const seen = { hero: true, cta: false, closer: false };
-  const setDock = () => {
-    const show = !seen.hero && !seen.cta && !seen.closer;
+  const dockZones = ['.hero', '.calc__result', '[data-closer]', '#audit', '.foot']
+    .map((sel) => document.querySelector(sel)).filter(Boolean);
+  function setDock() {
+    const h = window.innerHeight;
+    const busy = dockZones.some((el) => {
+      const r = el.getBoundingClientRect();
+      return r.bottom > 0 && r.top < h;
+    });
+    const show = !busy;
     dock.classList.toggle('is-visible', show);
     dock.setAttribute('aria-hidden', String(!show));
     dockLink.tabIndex = show ? 0 : -1;
-  };
-  const dockIO = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.target === hero) seen.hero = entry.isIntersecting;
-      if (entry.target === finalCta) seen.cta = entry.isIntersecting;
-      if (entry.target === closer) seen.closer = entry.isIntersecting;
-    });
-    setDock();
-  });
-  dockIO.observe(hero);
-  dockIO.observe(finalCta);
-  dockIO.observe(closer);
+  }
+  window.addEventListener('scroll', setDock, { passive: true });
+  window.addEventListener('resize', setDock);
+  document.addEventListener('ac:lang', setDock);
+  setDock();
 
   /* ── Audit form → WhatsApp ── */
   function clearErrors() {
