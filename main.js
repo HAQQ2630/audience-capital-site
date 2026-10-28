@@ -43,6 +43,9 @@ const WHATSAPP_NUMBER = '';
     document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
       el.setAttribute('aria-label', t(el.dataset.i18nAria));
     });
+    document.querySelectorAll('[data-i18n-ph]').forEach((el) => {
+      el.placeholder = t(el.dataset.i18nPh);
+    });
 
     document.title = lang === 'ar' ? dict.ar['meta.title'] : enMeta.title;
     metaDesc.content = lang === 'ar' ? dict.ar['meta.description'] : enMeta.description;
@@ -324,6 +327,68 @@ const WHATSAPP_NUMBER = '';
     link.rel = 'noopener';
     link.click();
   });
+
+  /* ── Ask: tap a question, the answer types in ── */
+  const ask = document.querySelector('[data-ask]');
+  if (ask) {
+    const thread = ask.querySelector('[data-ask-thread]');
+    const chips = [...ask.querySelectorAll('.chip')];
+    const askForm = ask.querySelector('[data-ask-form]');
+    const askStatus = ask.querySelector('[data-ask-status]');
+    let answerTimer = 0;
+
+    const bubble = (cls, text) => {
+      const p = document.createElement('p');
+      p.className = `bubble ${cls}`;
+      p.textContent = text;
+      return p;
+    };
+
+    chips.forEach((chip) => chip.addEventListener('click', () => {
+      clearTimeout(answerTimer);
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      const n = chip.dataset.q;
+      thread.replaceChildren(bubble('bubble--q', chip.textContent.trim()));
+      const wait = document.createElement('p');
+      wait.className = 'bubble bubble--a';
+      wait.innerHTML = '<span class="typing" aria-hidden="true"><i></i><i></i><i></i></span>';
+      thread.append(wait);
+      answerTimer = setTimeout(() => wait.replaceWith(bubble('bubble--a', t(`ask.a${n}`))), reduceMotion ? 0 : 700);
+    }));
+
+    askForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const question = askForm.elements.q.value.trim();
+      if (!question) { askForm.elements.q.focus(); return; }
+      const number = WHATSAPP_NUMBER.replace(/\D/g, '');
+      if (!number) { askStatus.textContent = t('form.noNumber'); return; }
+      askStatus.textContent = t('form.opening');
+      const link = document.createElement('a');
+      link.href = `https://wa.me/${number}?text=${encodeURIComponent(`${t('ask.waIntro')}\n\n${question}`)}`;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.click();
+    });
+
+    document.addEventListener('ac:lang', () => {
+      clearTimeout(answerTimer);
+      thread.replaceChildren();
+      askStatus.textContent = '';
+      chips.forEach((c) => c.removeAttribute('aria-pressed'));
+    });
+  }
+
+  /* ── Story rail: fills as the steps reveal ── */
+  const storySteps = [...document.querySelectorAll('[data-story] .story__step')];
+  const storyRail = document.querySelector('[data-story-rail]');
+  function fillRail() {
+    if (!storyRail) return;
+    const shown = storySteps.filter((el) => el.classList.contains('is-in')).length;
+    storyRail.style.width = `${(shown / storySteps.length) * 100}%`;
+  }
+  if (storyRail) {
+    new MutationObserver(fillRail).observe(document.querySelector('[data-story]'), { subtree: true, attributes: true, attributeFilter: ['class'] });
+  }
 
   /* ── Revenue estimator ── */
   const calc = document.querySelector('[data-calc]');

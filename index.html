@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Audience Capital | You have the audience. We build the business.</title>
-  <meta name="description" content="Audience Capital is the sales and monetization engine behind fitness and health creators. We build your offer, set up the system and sell it with our own team. Revenue share only.">
+  <meta name="description" content="Audience Capital is the sales and monetization engine behind creators across the Middle East and Europe. We build your offer, set up the system and sell it with our own team. Revenue share only.">
   <meta name="theme-color" content="#f8f5ef">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Audience Capital | You have the audience. We build the business.">
-  <meta property="og:description" content="Coaching, communities and digital products, sold by our own sales team. Arabic-first. Revenue share only.">
+  <meta property="og:description" content="Coaching, communities, digital products and brands, sold by our own sales team. Arabic and English. Revenue share only.">
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,9 +43,9 @@
     <!-- Hero -->
     <section class="hero wrap">
       <div class="hero__copy">
-        <p class="eyebrow reveal" data-i18n="hero.eyebrow">For fitness and health creators</p>
-        <h1 class="hero__title reveal" data-i18n="hero.title">You have the audience. <span class="muted">We build the <span class="rot" data-rotator><span>business.</span><span>offer.</span><span>sales team.</span><span>community.</span></span></span></h1>
-        <p class="lede reveal" data-i18n="hero.lede">Coaching, paid communities and digital products, built with you and sold by our own sales team. You keep creating. We turn your audience into income you own.</p>
+        <p class="eyebrow reveal" data-i18n="hero.eyebrow">For creators across the Middle East and Europe</p>
+        <h1 class="hero__title reveal" data-i18n="hero.title">You have the audience. <span class="muted">We build the <span class="rot" data-rotator><span>business.</span><span>offer.</span><span>brand.</span><span>sales team.</span></span></span></h1>
+        <p class="lede reveal" data-i18n="hero.lede">Fitness, fashion, beauty, lifestyle or education: if your audience trusts you, we build the offer and our own sales team sells it. You keep creating. We turn your audience into income you own.</p>
         <div class="hero__ctas reveal">
           <a class="btn btn--lg" href="#audit"><span data-i18n="cta.audit">Get your free audit</span> <span class="arrow" aria-hidden="true">→</span></a>
           <a class="btn btn--ghost btn--lg" href="#process" data-i18n="cta.how">See how it works</a>
@@ -67,36 +67,46 @@
             <li><span class="flow__k" data-i18n="ticket.s1k">Instagram DM</span><span data-i18n="ticket.s1">“How do I join your program?”</span></li>
             <li><span class="flow__k" data-i18n="ticket.s2k">Our setter</span><span data-i18n="ticket.s2">Replies on WhatsApp, qualifies the lead</span></li>
             <li><span class="flow__k" data-i18n="ticket.s3k">Our closer</span><span data-i18n="ticket.s3">Sales call booked and closed</span></li>
-            <li class="flow__win"><span class="flow__k" data-i18n="ticket.s4k">Client paid</span><span data-i18n="ticket.s4">Coaching starts. You keep creating.</span></li>
+            <li class="flow__win"><span class="flow__k" data-i18n="ticket.s4k">Client paid</span><span data-i18n="ticket.s4">Order confirmed. You keep creating.</span></li>
           </ol>
         </div>
       </figure>
     </section>
 
-    <!-- Rented vs owned -->
-    <section class="section wrap" aria-labelledby="owned-title">
-      <h2 class="h2 reveal" id="owned-title" data-i18n="owned.title">Followers are rented. <span class="muted">A business is owned.</span></h2>
-      <p class="section__lede reveal" data-i18n="owned.lede">Most creators earn from one source: brand deals. They get paid once for a post, and the brand keeps the customer and the profit.</p>
-      <div class="compare">
-        <div class="compare__col compare__col--rented reveal">
-          <h3 class="compare__h" data-i18n="owned.rentedH">A brand deal</h3>
-          <ul class="ticks ticks--x">
-            <li data-i18n="owned.r1">Paid once per post</li>
-            <li data-i18n="owned.r2">The brand keeps the customer</li>
-            <li data-i18n="owned.r3">The algorithm decides what you earn</li>
-            <li data-i18n="owned.r4">Ends when the campaign ends</li>
-          </ul>
+    <!-- Ask: tap a question, get the answer (after Nordify) -->
+    <section class="wrap ask-wrap" aria-labelledby="ask-title">
+      <div class="ask reveal" data-ask>
+        <p class="ask__title" id="ask-title" data-i18n="ask.title">Ask us anything</p>
+        <div class="ask__chips" role="list">
+          <button class="chip" type="button" role="listitem" data-q="1" data-i18n="ask.q1">What does it cost?</button>
+          <button class="chip" type="button" role="listitem" data-q="2" data-i18n="ask.q2">Which creators do you work with?</button>
+          <button class="chip" type="button" role="listitem" data-q="3" data-i18n="ask.q3">Do I need a big following?</button>
+          <button class="chip" type="button" role="listitem" data-q="4" data-i18n="ask.q4">How do we start?</button>
         </div>
-        <div class="compare__col compare__col--owned reveal">
-          <h3 class="compare__h" data-i18n="owned.ownedH">A business with Audience Capital</h3>
-          <ul class="ticks">
-            <li data-i18n="owned.o1">Recurring monthly income</li>
-            <li data-i18n="owned.o2">Your clients, your community, your products</li>
-            <li data-i18n="owned.o3">A sales team working your demand every day</li>
-            <li data-i18n="owned.o4">Something that lasts beyond the algorithm</li>
-          </ul>
-        </div>
+        <div class="ask__thread" aria-live="polite" data-ask-thread></div>
+        <form class="ask__form" data-ask-form novalidate>
+          <label class="sr-only" for="ask-input" data-i18n="ask.label">Your question</label>
+          <input id="ask-input" name="q" type="text" maxlength="300" autocomplete="off" placeholder="Type your own question…" data-i18n-ph="ask.ph">
+          <button class="btn" type="submit"><span data-i18n="ask.send">Ask on WhatsApp</span> <span class="arrow" aria-hidden="true">→</span></button>
+        </form>
+        <p class="ask__status" data-ask-status role="status"></p>
       </div>
+    </section>
+
+    <!-- Story: rented vs owned, pinned heading with steps that fill a progress rail (after Monerize) -->
+    <section class="section wrap story" aria-labelledby="owned-title">
+      <div class="story__pin">
+        <h2 class="h2 reveal" id="owned-title" data-i18n="owned.title">Followers are rented. <span class="muted">A business is owned.</span></h2>
+        <p class="section__lede reveal" data-i18n="owned.lede">Most creators earn from one source: brand deals. They get paid once for a post, and the brand keeps the customer and the profit.</p>
+        <div class="story__rail" aria-hidden="true"><span data-story-rail></span></div>
+      </div>
+      <ol class="story__steps" data-story>
+        <li class="story__step reveal"><span class="story__k" data-i18n="story.k1">Today</span><p data-i18n="story.s1">You post. People watch, save, comment and DM you.</p></li>
+        <li class="story__step reveal"><span class="story__k" data-i18n="story.k2">The problem</span><p data-i18n="story.s2">Brand deals come and go. Some months are great, some are quiet, and the algorithm decides which.</p></li>
+        <li class="story__step reveal"><span class="story__k" data-i18n="story.k3">The gap</span><p data-i18n="story.s3">Your DMs are full of people asking how to work with you. Nobody is there to answer and sell.</p></li>
+        <li class="story__step reveal"><span class="story__k" data-i18n="story.k4">What we do</span><p data-i18n="story.s4">We build the offer, set up the system and put our own sales team on your demand.</p></li>
+        <li class="story__step story__step--win reveal"><span class="story__k" data-i18n="story.k5">The result</span><p data-i18n="story.s5">Your content drives sales. Recurring income, your own clients, something that lasts beyond the algorithm.</p></li>
+      </ol>
     </section>
 
     <!-- What we build -->
@@ -258,12 +268,13 @@
       <div class="wrap gulf">
         <div class="gulf__copy">
           <p class="eyebrow reveal" data-i18n="gulf.eyebrow">Why us</p>
-          <h2 class="h2 reveal" id="gulf-title" data-i18n="gulf.title">Built for how the Gulf buys. <span class="muted">Most agencies aren't.</span></h2>
-          <p class="section__lede reveal" data-i18n="gulf.lede">They run on English, email and Zoom. In the Gulf, people buy on WhatsApp, with local payments and in their own dialect.</p>
+          <h2 class="h2 reveal" id="gulf-title" data-i18n="gulf.title">Built for how your audience buys. <span class="muted">Most agencies aren't.</span></h2>
+          <p class="section__lede reveal" data-i18n="gulf.lede">They run on email and Zoom. Across the Middle East and Europe, people buy on WhatsApp, in their own language, with payments they trust.</p>
           <dl class="points">
             <div class="reveal"><dt data-i18n="gulf.p1h">WhatsApp-first sales</dt><dd data-i18n="gulf.p1">Our setters reply where your audience already is.</dd></div>
-            <div class="reveal"><dt data-i18n="gulf.p2h">In their dialect</dt><dd data-i18n="gulf.p2">A bilingual team. Arabic first, English too.</dd></div>
+            <div class="reveal"><dt data-i18n="gulf.p2h">In their dialect</dt><dd data-i18n="gulf.p2">Arabic and English, in the way your audience actually talks.</dd></div>
             <div class="reveal"><dt data-i18n="gulf.p3h">Local payments</dt><dd data-i18n="gulf.p3">Checkout your audience knows and trusts.</dd></div>
+            <div class="reveal"><dt data-i18n="gulf.p4h">A hungry team</dt><dd data-i18n="gulf.p4">Researchers find the demand, setters start the conversations, closers make the sale, creatives sharpen the content.</dd></div>
           </dl>
         </div>
         <figure class="chat reveal" lang="ar" dir="rtl">
@@ -290,11 +301,11 @@
         <p class="section__lede reveal" data-i18n="fit.lede">Thousands of creators with a loyal audience still struggle to pay rent, because nobody has built the business behind them. If that sounds familiar, we should talk.</p>
       </div>
       <ul class="ticks ticks--lg reveal">
-        <li data-i18n="fit.1">You create fitness or health content</li>
+        <li data-i18n="fit.1">You create content people trust: fitness, fashion, beauty, lifestyle, education or more</li>
         <li data-i18n="fit.2">You have roughly 10K to 150K engaged followers</li>
-        <li data-i18n="fit.3">People already ask you for programs or coaching</li>
+        <li data-i18n="fit.3">People already ask you for advice, programs or products</li>
         <li data-i18n="fit.4">You want income you own, not only brand deals</li>
-        <li data-i18n="fit.5">You speak to your audience in Arabic or English</li>
+        <li data-i18n="fit.5">Your audience is in the Middle East, Europe or beyond</li>
       </ul>
     </section>
 
@@ -335,7 +346,15 @@
         </details>
         <details class="qa">
           <summary data-i18n="faq.q5">Do you work in Arabic and English?</summary>
-          <p data-i18n="faq.a5">Yes. We're Arabic-first across the Middle East, and we also work with English-speaking creators worldwide.</p>
+          <p data-i18n="faq.a5">Yes. Arabic across the Middle East, English across Europe and the rest of the world.</p>
+        </details>
+        <details class="qa">
+          <summary data-i18n="faq.q7">Which creators do you work with?</summary>
+          <p data-i18n="faq.a7">Any creator whose audience trusts them enough to buy: fitness, fashion, beauty, lifestyle, food, education and more. If people ask you for advice, there is a business in it.</p>
+        </details>
+        <details class="qa">
+          <summary data-i18n="faq.q8">Who is on the team?</summary>
+          <p data-i18n="faq.a8">Lead researchers who find where the demand is, setters who start the conversations, closers who make the sale, and creatives who sharpen your content. We get paid when you get paid.</p>
         </details>
         <details class="qa">
           <summary data-i18n="faq.q6">What happens in the free audit?</summary>
@@ -397,8 +416,10 @@
               <label for="f-niche" data-i18n="form.niche">Niche</label>
               <select id="f-niche" name="niche" required>
                 <option value="" data-i18n="form.choose">Choose</option>
-                <option value="Fitness" data-i18n="form.niche0">Fitness</option>
-                <option value="Health & nutrition" data-i18n="form.niche1">Health and nutrition</option>
+                <option value="Fitness & health" data-i18n="form.niche0">Fitness and health</option>
+                <option value="Fashion & beauty" data-i18n="form.niche1">Fashion and beauty</option>
+                <option value="Lifestyle" data-i18n="form.niche3">Lifestyle</option>
+                <option value="Education & coaching" data-i18n="form.niche4">Education and coaching</option>
                 <option value="Other" data-i18n="form.niche2">Something else</option>
               </select>
               <p class="field__err" id="e-niche" data-i18n="form.errChoose" hidden>Please choose one.</p>
