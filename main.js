@@ -160,6 +160,26 @@ const WHATSAPP_NUMBER = '';
     closerIO.disconnect();
   }, { threshold: 0.25 });
   closerIO.observe(closer);
+
+  /* ── Backup for the observers above: some in-app browsers and embedded viewers
+     never fire IntersectionObserver, which would leave sections invisible. ── */
+  const pending = () => [...document.querySelectorAll('.reveal:not(.is-in), .chat:not(.is-in)')];
+  function sweep() {
+    const limit = window.innerHeight * 0.95;
+    pending().forEach((el) => { if (el.getBoundingClientRect().top < limit) el.classList.add('is-in'); });
+    if (!closer.classList.contains('is-open') && closer.getBoundingClientRect().top < limit * 0.8) closer.classList.add('is-open');
+  }
+  window.addEventListener('scroll', sweep, { passive: true });
+  window.addEventListener('resize', sweep);
+  window.addEventListener('load', sweep);
+  sweep();
+  // Last resort: if nothing has revealed after a few seconds, show everything.
+  setTimeout(() => {
+    if (!document.querySelector('.reveal.is-in')) {
+      pending().forEach((el) => el.classList.add('is-in'));
+      closer.classList.add('is-open');
+    }
+  }, 4000);
   document.addEventListener('ac:lang', splitWords);
   splitWords();
 
@@ -322,6 +342,7 @@ const WHATSAPP_NUMBER = '';
     const rates = { USD: 1, AED: 3.6725, SAR: 3.75 };
     let shown = 0;
     let anim = 0;
+    let runs = 0;
     let curTouched = false;
 
     const picked = (name) => calc.querySelector(`input[name="${name}"]:checked`).value;
@@ -341,6 +362,9 @@ const WHATSAPP_NUMBER = '';
         if (p < 1) anim = requestAnimationFrame(step);
       };
       anim = requestAnimationFrame(step);
+      // If frames are paused (background tab, some in-app browsers), land on the final number anyway.
+      const run = ++runs;
+      setTimeout(() => { if (run === runs && shown !== target) { cancelAnimationFrame(anim); shown = target; totalEl.textContent = money(target, cur); } }, 600);
     }
 
     function update() {
