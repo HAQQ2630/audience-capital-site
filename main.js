@@ -98,6 +98,25 @@ const track = (() => {
     store(next);
   });
 
+  /* ── In-page links: scroll with JS so they also work inside embedded viewers,
+     where the browser's own #anchor jump can be blocked ── */
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link || event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey) return;
+    const id = link.getAttribute('href').slice(1);
+    // The header is sticky, so "#top" means the top of the page, not the header's position.
+    const target = id === 'top' ? document.body : (id ? document.getElementById(id) : null);
+    if (!target) return;
+    event.preventDefault();
+    try {
+      target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    } catch (e) {
+      target.scrollIntoView(true);
+    }
+    if (id === 'main' || id === 'audit') target.setAttribute('tabindex', '-1');
+    try { target.focus({ preventScroll: true }); } catch (e) { /* older browsers */ }
+  });
+
   /* ── Click tracking for CTAs ── */
   document.addEventListener('click', (event) => {
     const el = event.target.closest('[data-track]');
