@@ -62,7 +62,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-size: 0.875rem; font-weight: 500; color: var(--accent-deep);
   margin-block-end: 1.25rem; display: flex; align-items: center; gap: 0.6rem;
 }
-.eyebrow::before { content: ""; width: 0.55rem; height: 0.55rem; background: var(--accent); border-radius: 2px; flex: none; }
 .eyebrow--light { color: var(--accent); }
 .h2 {
   font-size: clamp(2rem, 1.35rem + 2.7vw, 3.6rem);
@@ -180,18 +179,12 @@ html:not(.js) .rot > span:first-child { opacity: 1; transform: none; filter: non
 .assurances--ink li::before { background: var(--ink); }
 
 .hero__visual { margin: 0; position: relative; }
-.hero__visual::before {
-  content: ""; position: absolute; inset: 8% -6% -6% 10%;
-  background: var(--accent); border-radius: calc(var(--radius) + 8px); transform: rotate(3deg);
-}
-[dir="rtl"] .hero__visual::before { inset: 8% 10% -6% -6%; transform: rotate(-3deg); }
 .ticket {
   position: relative; background: var(--card); border-radius: var(--radius);
   padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
-  box-shadow: 0 1px 0 var(--line), 0 30px 60px -30px oklch(21% 0.018 55 / 0.35);
+  border: 1px solid var(--line);
 }
-.ticket__head { display: flex; align-items: center; gap: 0.6rem; font-weight: 600; font-size: 0.9375rem; margin-block-end: 1.25rem; }
-.ticket__dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px oklch(52% 0.12 150 / 0.15); }
+.ticket__head { display: flex; align-items: center; gap: 0.6rem; font-weight: 500; font-size: 0.9375rem; margin-block-end: 1.25rem; }
 
 .flow { display: grid; gap: 0.6rem; counter-reset: flow; }
 .flow li {
@@ -211,9 +204,7 @@ html:not(.js) .rot > span:first-child { opacity: 1; transform: none; filter: non
 
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; }
-  .hero__visual { max-width: 460px; width: calc(100% - 1.25rem); }
-  .hero__visual::before { inset: 6% -1rem -1rem 8%; }
-  [dir="rtl"] .hero__visual::before { inset: 6% 8% -1rem -1rem; }
+  .hero__visual { max-width: 460px; }
 }
 
 /* Sections */
@@ -288,6 +279,7 @@ html[lang="ar"] .story__step p { letter-spacing: 0; line-height: 1.7; }
 @media (max-width: 860px) {
   .story { grid-template-columns: 1fr; }
   .story__pin { position: static; }
+  .story__rail { display: none; }
 }
 
 .ticks { display: grid; gap: 0.9rem; }
@@ -364,7 +356,18 @@ html[lang="ar"] .acc__h { letter-spacing: 0; }
 .tag { align-self: flex-start; margin-block-start: auto; font-size: 0.8125rem; font-weight: 600; padding: 0.35rem 0.75rem; border-radius: 999px; background: var(--accent-wash); color: var(--accent-deep); }
 .step p + .tag { margin-block-start: 0.5rem; }
 .pledge { margin-block-start: clamp(2.5rem, 4vw, 3.5rem); font-size: clamp(1.125rem, 1rem + 0.5vw, 1.375rem); max-width: 40ch; }
-@media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+@media (max-width: 860px) {
+  .steps { grid-template-columns: 1fr; gap: 0; }
+  .step {
+    display: grid; grid-template-columns: 3.25rem minmax(0, 1fr); column-gap: 1rem; row-gap: 0.4rem;
+    padding-block: 1.25rem; border-block-start-width: 1px;
+  }
+  .step > * { grid-column: 2; }
+  .step__n { grid-column: 1; grid-row: 1 / span 3; font-size: 2.25rem; }
+  .step__h { font-size: 1.25rem; }
+  .step p + .tag { margin-block-start: 0.25rem; }
+  .step .tag { justify-self: start; }
+}
 
 /* Revenue estimator */
 .calc {
@@ -447,9 +450,8 @@ html[lang="ar"] .acc__h { letter-spacing: 0; }
 /* Gulf */
 .gulf { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: clamp(2.5rem, 6vw, 6rem); align-items: center; }
 .points { display: grid; gap: 1.5rem; margin-block-start: 2.5rem; }
-.points div { display: grid; gap: 0.2rem; padding-inline-start: 1.25rem; position: relative; }
-.points div::before { content: ""; position: absolute; inset-inline-start: 0; top: 0.55em; width: 0.5rem; height: 0.5rem; border-radius: 2px; background: var(--accent); }
-.points dt { font-weight: 600; font-size: 1.125rem; }
+.points div { display: grid; gap: 0.2rem; padding-block-start: 1.25rem; border-block-start: 1px solid var(--line); }
+.points dt { font-weight: 500; font-size: 1.125rem; }
 .points dd { margin: 0; color: var(--ink-2); }
 
 .chat {

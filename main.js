@@ -2,7 +2,27 @@
 // WhatsApp number that receives audit requests: international format,
 // digits only, no "+" or spaces. Example for a UAE number: '971501234567'.
 const WHATSAPP_NUMBER = '';
+// PostHog project API key (starts with "phc_", public by design) and the
+// region your PostHog project lives in: 'eu' or 'us'. Empty key = no tracking.
+const POSTHOG_KEY = '';
+const POSTHOG_REGION = 'eu';
 // ───────────────────────────────────────────────────────────────────────
+
+/* ── Analytics: PostHog (official loader snippet), cookieless via memory persistence ── */
+const track = (() => {
+  if (!POSTHOG_KEY) return () => {};
+  /* eslint-disable */
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  /* eslint-enable */
+  window.posthog.init(POSTHOG_KEY, {
+    api_host: `https://${POSTHOG_REGION}.i.posthog.com`,
+    persistence: 'memory',
+    person_profiles: 'identified_only',
+    capture_pageview: true,
+    autocapture: false
+  });
+  return (name, props = {}) => window.posthog.capture(name, { ...props, lang: document.documentElement.lang });
+})();
 
 (() => {
   const root = document.documentElement;
@@ -72,9 +92,16 @@ const WHATSAPP_NUMBER = '';
 
   toggle.addEventListener('click', () => {
     const next = lang === 'ar' ? 'en' : 'ar';
+    track('language_switch', { to: next });
     if (document.startViewTransition && !reduceMotion) document.startViewTransition(() => applyLang(next));
     else applyLang(next);
     store(next);
+  });
+
+  /* ── Click tracking for CTAs ── */
+  document.addEventListener('click', (event) => {
+    const el = event.target.closest('[data-track]');
+    if (el) track('cta_click', { location: el.dataset.track });
   });
 
   /* ── Nav border on scroll ── */
@@ -287,6 +314,7 @@ const WHATSAPP_NUMBER = '';
       document.getElementById(`e-${name}`).hidden = false;
     });
     if (invalid.length) {
+      track('audit_invalid', { fields: invalid.join(',') });
       status.textContent = t('form.fixErrors');
       status.classList.add('is-error');
       form.elements[invalid[0]].focus();
@@ -319,6 +347,7 @@ const WHATSAPP_NUMBER = '';
     const note = label('note');
     if (note) lines.push(`${t('wa.note')}: ${note}`);
 
+    track('audit_submit', { size: form.elements.size.value, niche: form.elements.niche.value });
     const url = `https://wa.me/${number}?text=${encodeURIComponent(lines.join('\n'))}`;
     status.textContent = t('form.opening');
     const link = document.createElement('a');
@@ -348,6 +377,7 @@ const WHATSAPP_NUMBER = '';
       clearTimeout(answerTimer);
       chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
       const n = chip.dataset.q;
+      track('ask_question', { question: n });
       thread.replaceChildren(bubble('bubble--q', chip.textContent.trim()));
       const wait = document.createElement('p');
       wait.className = 'bubble bubble--a';
@@ -360,6 +390,7 @@ const WHATSAPP_NUMBER = '';
       event.preventDefault();
       const question = askForm.elements.q.value.trim();
       if (!question) { askForm.elements.q.focus(); return; }
+      track('ask_whatsapp', { has_number: Boolean(WHATSAPP_NUMBER) });
       const number = WHATSAPP_NUMBER.replace(/\D/g, '');
       if (!number) { askStatus.textContent = t('form.noNumber'); return; }
       askStatus.textContent = t('form.opening');
@@ -463,10 +494,18 @@ const WHATSAPP_NUMBER = '';
       countTo(buyers * price, cur);
     }
 
-    range.addEventListener('input', update);
+    let calcTimer = 0;
+    const trackCalc = () => {
+      clearTimeout(calcTimer);
+      calcTimer = setTimeout(() => track('calculator_used', {
+        followers: +range.value, offer: picked('calc-offer'), currency: picked('calc-cur')
+      }), 1200);
+    };
+    range.addEventListener('input', () => { update(); trackCalc(); });
     calc.querySelectorAll('input[type="radio"]').forEach((input) => input.addEventListener('change', () => {
       if (input.name === 'calc-cur') curTouched = true;
       update();
+      trackCalc();
     }));
     const syncLang = () => {
       // Arabic visitors see dirhams by default until they choose a currency.
